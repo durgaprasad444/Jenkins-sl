@@ -1,23 +1,24 @@
-def call() {
-  node {
-    stage('Checkout') {
-      checkout scm
-    }
-    def p = pipelineCfg()
+def label = "docker-slave-${UUID.randomUUID().toString()}"
+podTemplate(label: label, containers: [
+    containerTemplate(name: 'docker', image: 'durgaprasad444/jenmine:1.1', ttyEnabled: true, command: 'cat')
+],
+volumes: [
+  hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+]) {
+    node(label) {
+        def APP_NAME = "hello-world"
+        def tag = "dev"
+            stage("clone code") {
+                container('slave1') {
+                    
+                    // Let's clone the source
+                    sh """ 
+                      git clone https://github.com/durgaprasad444/${APP_NAME}.git            
+                      cd ${APP_NAME}
+                      cp -r * /home/jenkins/workspace/maven-example
+                    """
+                }
+            }
 
-    docker.image('python:2.7.15-alpine').inside() {
-      stage('Test') {
-        sh 'pip install -r requirements.txt'
-        sh p.testCommand
-      }
-    }
-
-    if (env.BRANCH_NAME == 'master' && p.deployUponTestSuccess == true) {
-      docker.image(p.deployToolImage).inside {
-        stage('Deploy') {
-          sh "echo ${p.deployCommand} ${p.deployEnvironment}"
-        }
-      }
-    }
-  }
-}
+                }
+            }
