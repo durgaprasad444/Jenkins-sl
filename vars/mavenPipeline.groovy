@@ -5,7 +5,7 @@ def call() {
     }
     def p = pipelineCfg()
 
-    if (p.runTests == true) {
+    if (p.type == python) {
       
         stage('Test') {
           sh 'ls'
