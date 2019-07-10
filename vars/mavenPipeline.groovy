@@ -8,6 +8,7 @@ def call() {
     if (p.python == true) {
       
         stage('Test') {
+          pipeline.groovy()
           sh 'ls'
           
           //sh p.testCommand
