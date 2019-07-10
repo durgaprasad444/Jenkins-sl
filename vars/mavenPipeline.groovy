@@ -5,7 +5,7 @@ def call() {
     }
     def p = pipelineCfg()
 
-    if (p.type == maven) {
+    if (p.python == true) {
       
         stage('Test') {
           sh 'ls'
