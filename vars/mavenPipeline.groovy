@@ -5,7 +5,7 @@ def call() {
     }
     def p = pipelineCfg()
 
-    if (p.type == python) {
+    if (p.runTests: true) {
       docker.image(p.testImage).inside() {
         stage('Test') {
           sh 'ls'
