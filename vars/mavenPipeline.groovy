@@ -5,7 +5,7 @@ def call() {
     }
     def p = pipelineCfg()
 
-    if (p.runTests == true) {
+    if (p.type == python) {
       docker.image(p.testImage).inside() {
         stage('Test') {
           sh 'ls'
@@ -14,7 +14,8 @@ def call() {
         }
       }
     }
-
+    else {
+      sh 'echo "durga"'
   
   }
 }
