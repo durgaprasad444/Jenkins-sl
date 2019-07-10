@@ -16,6 +16,7 @@ def call() {
     }
     else {
       sh 'echo "durga"'
+    }
   
   }
 }
